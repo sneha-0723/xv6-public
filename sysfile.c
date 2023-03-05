@@ -442,3 +442,37 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+int sys_hello(void){
+    cprintf("Hello World\n");
+    return 0;
+}
+
+int sys_lseek(void){
+     
+     int pos;
+     struct file *fp;
+     int mode;
+     if(argfd(0,0,&fp)<0 || argint(1,&pos)<0 || argint(2,&mode)<0){
+          return -1;
+}
+else{
+
+      switch(mode){
+        case SEEK_SET:
+             fp->off=pos;
+             break;
+        case SEEK_CUR:
+             fp->off=fp->off+pos;
+             break;          
+        case SEEK_END:
+             fp->off=fp->ip->size;
+             fp->off=fp->off+pos;
+             break;
+        default:
+            fp->off = -1;          
+            break;
+     }
+     return fp->off;
+}
+}
+
