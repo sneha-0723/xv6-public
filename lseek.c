@@ -28,7 +28,7 @@ int main(int argc,char* argv[]){
      printf(1,"_____________________\n");
     printf(1,str);
     printf(1,"\n");
-     printf(1,"******************************************************************************************\n");
+     printf(1,"*******************************************************\n");
    
 
     fd1=open("file.txt",O_RDONLY);
@@ -38,7 +38,7 @@ int main(int argc,char* argv[]){
     
     if(ans==offset){
          prev_offset=ans;
-         buf=(char*)malloc(sizeof(char)*ans);
+         buf=(char*)sbrk(sizeof(char)+ans);
         
          read(fd1,buf,ans);
        
@@ -50,10 +50,14 @@ int main(int argc,char* argv[]){
         
 
     }
-    printf(1,"*******************************************************************************************\n");
+    else{
+     printf(1,"Seek set failed for this file\n");
+     exit();
+    }
+    printf(1,"***********************************************************\n");
     ans=lseek(fd,offset,SEEK_CUR);
     if(ans==prev_offset+offset){
-       buf=(char*)malloc(sizeof(char)*offset);
+       buf=(char*)sbrk(sizeof(char)+offset);
         
          read(fd1,buf,offset);
        
@@ -63,14 +67,19 @@ int main(int argc,char* argv[]){
 
 
     }
-    printf(1,"******************************************************************************************\n");
+    else{
+     printf(1,"Seek cur failed for this file\n");
+     exit();
+     
+    }
+    printf(1,"************************************************************\n");
     int offset1=-1*offset;
     ans=lseek(fd,offset1,SEEK_END);
     
     if(ans==strlen(str)+offset1){
           
          lseek(fd1,ans,SEEK_SET);
-          buf=(char*)malloc(sizeof(char)*offset);
+          buf=(char*)sbrk(sizeof(char)+offset);
         
          read(fd1,buf,offset);
        
@@ -78,9 +87,14 @@ int main(int argc,char* argv[]){
          printf(1,buf);
          printf(1,"\n");
     }
-    printf(1,"*******************************************************************************************\n");
+    else{
+     printf(1,"Seek end failed for this file\n");
+     exit();
+    }
+    printf(1,"********************************************************************\n");
 
-   
+    lseek(fd,0,SEEK_SET);
+    lseek(fd,0,SEEK_CUR);   
     close(fd);
     close(fd1);
    
