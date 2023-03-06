@@ -452,7 +452,8 @@ int sys_lseek(void){
      int pos;
      struct file *fp;
      int mode;
-     if(argfd(0,0,&fp)<0 || argint(1,&pos)<0 || argint(2,&mode)<0){
+     int fd;
+     if(argfd(0,&fd,&fp)<0 || argint(1,&pos)<0 || argint(2,&mode)<0){
           return -1;
 }
 else{
